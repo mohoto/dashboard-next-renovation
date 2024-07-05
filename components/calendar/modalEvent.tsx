@@ -1,5 +1,6 @@
 "use client"
 import {useState} from 'react'
+import moment from 'moment';
 import { Moment } from 'moment';
 import Datepicker from "tailwind-datepicker-react"
 import DatePicker1 from '@/components/calendar/datePicker1'
@@ -40,15 +41,14 @@ const FormSchema = z.object({
 
   })
 
-  
 
 
 type Props = {
     setIShowDialogue: (value: boolean) => void;
-    planifiedDate: Moment;
+    currentDate: string;
 }
 
-function ModalEvent({setIShowDialogue, planifiedDate}: Props) {
+function ModalEvent({setIShowDialogue, currentDate}: Props) {
 
     const [dateSelected, setDateSelected] = useState("")
     console.log("dateSelected:",dateSelected)
@@ -113,7 +113,7 @@ function ModalEvent({setIShowDialogue, planifiedDate}: Props) {
                         <div className="lg:gap-x-4 gap-y-4 overflow-y-scroll h-96 p-4">
                             <div className="col-span-2 lg:w-1/2 mx-auto">
                                 <div className="f">
-                                    <DatePicker1 planifiedDate={planifiedDate} setDateSelected={setDateSelected}/>
+                                    <DatePicker1 currentDate={currentDate} setDateSelected={setDateSelected}/>
                                 </div>
                             </div>
                             <div>

@@ -27,8 +27,6 @@ function EventCalendarWeek({data, onDataChange}: Props) {
         daysOfWeek.push(currentWeek.clone().add(i, 'days'));
     }
 
-    console.log('currentWeek :',currentWeek)
-
     const isSameDay = moment().isSame(date, 'day');
 
     // Trier les événements par date

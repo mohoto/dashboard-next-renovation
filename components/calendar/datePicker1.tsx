@@ -5,11 +5,15 @@ import Datepicker from "tailwind-datepicker-react"
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 
 type Props = {
-    planifiedDate: Moment;
-    setDateSelected: (date: Date) => void
+    currentDate: string;
+    setDateSelected: (date: string) => void
 }
 
-function DatePicker1({planifiedDate, setDateSelected}: Props) {
+function DatePicker1({currentDate, setDateSelected}: Props) {
+
+
+    console.log("currentDate:", currentDate)
+    console.log("new Date", new Date("2024-08-01"))
 
     const [show, setShow] = useState<boolean>(false)
     const handleClose = (state: boolean) => {
@@ -49,7 +53,7 @@ function DatePicker1({planifiedDate, setDateSelected}: Props) {
         datepickerClassNames: "top-12",
         //defaultDate: new Date(),
         //defaultDate: new Date("2024-08-01"),
-        defaultDate: planifiedDate._d,
+        defaultDate: new Date(currentDate),
         language: "fr",
         disabledDates: [],
         weekDays: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"],

@@ -14,7 +14,6 @@ type Props = {
 function EventCalendarMonth({data, onDataChange}: Props) {
 
 const {date, changeMonth, daysGrid} = useEventCalendarMonth(); 
-console.log('daysGrid dans component', daysGrid)
   return (
     <div>
       <ControlsMonth changeMonth={changeMonth} date={date}/>

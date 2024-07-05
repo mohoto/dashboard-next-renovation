@@ -22,6 +22,8 @@ const sortEventsByTime = (events: EventsData) => {
 
 function Day({index, daysGridLength, item, events}: Props) {
 
+    console.log("item:", item.date)
+
     const [showDialogue, setIShowDialogue] = useState<boolean>(false)
 
     const getWeekDays = () => {
@@ -58,7 +60,7 @@ function Day({index, daysGridLength, item, events}: Props) {
             </div>
         </div>
         {showDialogue && (
-            <ModalEvent setIShowDialogue={setIShowDialogue} planifiedDate={item.date}/>
+            <ModalEvent setIShowDialogue={setIShowDialogue} currentDate={item.date.format('YYYY MM DD')}/>
         )}
     </div>
   )
