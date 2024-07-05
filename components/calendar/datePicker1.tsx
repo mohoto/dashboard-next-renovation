@@ -6,7 +6,8 @@ import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 
 type Props = {
     currentDate: string;
-    setDateSelected: (date: string) => void
+    //currentDate: Date;
+    setDateSelected: (date: Date) => void
 }
 
 function DatePicker1({currentDate, setDateSelected}: Props) {

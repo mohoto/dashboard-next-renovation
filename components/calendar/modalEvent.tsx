@@ -50,7 +50,7 @@ type Props = {
 
 function ModalEvent({setIShowDialogue, currentDate}: Props) {
 
-    const [dateSelected, setDateSelected] = useState("")
+    const [dateSelected, setDateSelected] = useState(new Date(currentDate))
     console.log("dateSelected:",dateSelected)
 
     /* console.log("new Date", new Date("2024-08-01"))
