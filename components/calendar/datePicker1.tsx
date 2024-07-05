@@ -5,16 +5,16 @@ import Datepicker from "tailwind-datepicker-react"
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 
 type Props = {
-    currentDate: string;
-    //currentDate: Date;
+    //currentDate: string;
+    currentDate: Date;
     setDateSelected: (date: Date) => void
 }
 
 function DatePicker1({currentDate, setDateSelected}: Props) {
 
 
-    console.log("currentDate:", currentDate)
-    console.log("new Date", new Date("2024-08-01"))
+    /* console.log("currentDate:", currentDate)
+    console.log("new Date", new Date("2024-08-01")) */
 
     const [show, setShow] = useState<boolean>(false)
     const handleClose = (state: boolean) => {
@@ -44,7 +44,7 @@ function DatePicker1({currentDate, setDateSelected}: Props) {
             disabledText: "bg-gray-100 text-white",
             input: "bg-blue-500 text-white",
             inputIcon: "text-white",
-            selected: "bg-red-500",
+            selected: "bg-blue-500",
         },
         icons: {
             // () => ReactElement | JSX.Element

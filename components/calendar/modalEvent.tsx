@@ -15,12 +15,20 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 const FormSchema = z.object({
+    heureInstalation: z.string().min(2),
     nom: z.string().min(2),
     prenom: z.string().min(2),
     tel: z.string().min(2),
@@ -41,17 +49,28 @@ const FormSchema = z.object({
 
   })
 
+// Fonction pour générer les heures et demi-heures
+const generateTimeSlots = () => {
+    const timeSlots = [];
+    for (let hour = 8; hour < 21; hour++) {
+        const formattedHour = hour < 10 ? `0${hour}` : `${hour}`;
+        timeSlots.push(`${formattedHour}:00`);
+        timeSlots.push(`${formattedHour}:30`);
+    }
+    return timeSlots;
+};
 
 
 type Props = {
     setIShowDialogue: (value: boolean) => void;
-    currentDate: string;
+    currentDate: Date;
 }
 
 function ModalEvent({setIShowDialogue, currentDate}: Props) {
 
     const [dateSelected, setDateSelected] = useState(new Date(currentDate))
     console.log("dateSelected:",dateSelected)
+   /* console.log("Type of dateSelected:",typeof(dateSelected)) */
 
     /* console.log("new Date", new Date("2024-08-01"))
     console.log("planifiedDate", planifiedDate._d)
@@ -61,6 +80,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
+            heureInstalation: "",
             nom: "",
             prenom: "",
             tel: "",
@@ -79,6 +99,8 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
             /*rappelTelephone: "",  */
         },
       })
+
+      const timeSlots = generateTimeSlots();
 
 
       const onSubmit = (values: z.infer<typeof FormSchema>) => {
@@ -110,10 +132,32 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
 
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-4">
-                        <div className="lg:gap-x-4 gap-y-4 overflow-y-scroll h-96 p-4">
-                            <div className="col-span-2 lg:w-1/2 mx-auto">
-                                <div className="f">
+                        <div className="flex flex-col gap-y-4 overflow-y-scroll h-96 p-4 lg:px-6">
+                            <div className="grid grid-cols-2 gap-x-4 justify-center">
+                                <div>
                                     <DatePicker1 currentDate={currentDate} setDateSelected={setDateSelected}/>
+                                </div>
+                                <div>
+                                    <FormField
+                                    control={form.control}
+                                    name="heureInstalation"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Heure" />
+                                                </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    {timeSlots?.map((value, index) => (
+                                                        <SelectItem key={index} value={value}>{value}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormItem>
+                                    )}
+                                    />
                                 </div>
                             </div>
                             <div>
@@ -137,7 +181,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 name="prenom"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Prenom</FormLabel>
+                                        <FormLabel className="text-muted-foreground">Prenom</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -152,7 +196,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 name="tel"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Telephone</FormLabel>
+                                        <FormLabel className="text-muted-foreground">Telephone</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -167,7 +211,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel className="text-muted-foreground">Email</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -182,7 +226,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 name="adresse"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Adresse</FormLabel>
+                                        <FormLabel className="text-muted-foreground">Adresse</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -197,7 +241,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 name="ville"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Ville</FormLabel>
+                                        <FormLabel className="text-muted-foreground">Ville</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -212,7 +256,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 name="codePostal"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Code postal</FormLabel>
+                                        <FormLabel className="text-muted-foreground">Code postal</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -227,11 +271,18 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 name="statutClient"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Statut du client</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormMessage />
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormLabel className="text-muted-foreground">Statut du client</FormLabel>
+                                            <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="" />
+                                            </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="Propriétaire">Propriétaire</SelectItem>
+                                                <SelectItem value="Locataire">Locataire</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </FormItem>
                                 )}
                                 />
@@ -242,26 +293,18 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 name="typeHabitation"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Type d'habitation</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                                />
-                            </div>
-                            <div>
-                                <FormField
-                                control={form.control}
-                                name="surface"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Surface</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormMessage />
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormLabel className="text-muted-foreground">Type d'habitation</FormLabel>
+                                            <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="" />
+                                            </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="Maison">Maison</SelectItem>
+                                                <SelectItem value="Appartement">Appartement</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </FormItem>
                                 )}
                                 />
@@ -272,7 +315,31 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 name="typeChauffage"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Type de chauffage</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormLabel className="text-muted-foreground">Mode de chauffage</FormLabel>
+                                            <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="" />
+                                            </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="Gaz">Gaz</SelectItem>
+                                                <SelectItem value="Fioul">Fioul</SelectItem>
+                                                <SelectItem value="PAC Eau">PAC Eau</SelectItem>
+                                                <SelectItem value="Électrique">Électrique</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormItem>
+                                )}
+                                />
+                            </div>
+                            <div>
+                                <FormField
+                                control={form.control}
+                                name="surface"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-muted-foreground">Surface</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -287,7 +354,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 name="nbrRadiateurs"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Nombre de radiateurs</FormLabel>
+                                        <FormLabel className="text-muted-foreground">Nombre de radiateurs</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -302,7 +369,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 name="commentaires"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Commentaires</FormLabel>
+                                        <FormLabel className="text-muted-foreground">Commentaires</FormLabel>
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
@@ -357,7 +424,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 />
                             </div> */}
                         </div>
-                        <div className="border-t border-gray-500 p-4">
+                        <div className="border-t p-4 lg:px-6">
                             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-all ease-out duration-75" type="submit">Enregistrer</button>
                         </div>
                     </form>
