@@ -5,16 +5,17 @@ import Datepicker from "tailwind-datepicker-react"
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 
 type Props = {
-    //currentDate: string;
-    currentDate: Date;
-    setDateSelected: (date: Date) => void
+    currentDate: string;
+    dateDaySelected: Date
+    //currentDate: Date;
+    setDateDaySelected: (date: Date) => void
 }
 
-function DatePicker1({currentDate, setDateSelected}: Props) {
+function DatePicker1({currentDate, setDateDaySelected, dateDaySelected}: Props) {
 
 
-    /* console.log("currentDate:", currentDate)
-    console.log("new Date", new Date("2024-08-01")) */
+    console.log("currentDate:", currentDate)
+    /* console.log("new Date", new Date("2024-08-01")) */
 
     const [show, setShow] = useState<boolean>(false)
     const handleClose = (state: boolean) => {
@@ -22,8 +23,8 @@ function DatePicker1({currentDate, setDateSelected}: Props) {
 	}
 
     const handleChange = (selectedDate: Date) => {
-		console.log(selectedDate)
-        setDateSelected(selectedDate)
+		console.log("selectedDate", selectedDate)
+        setDateDaySelected(selectedDate)
 	}
 
     const options = {
@@ -52,9 +53,9 @@ function DatePicker1({currentDate, setDateSelected}: Props) {
             next: () => <span><MdArrowForwardIos /></span>,
         },
         datepickerClassNames: "top-12",
-        //defaultDate: new Date(),
+        defaultDate: dateDaySelected,
         //defaultDate: new Date("2024-08-01"),
-        defaultDate: new Date(currentDate),
+        //defaultDate: new Date(currentDate),
         language: "fr",
         disabledDates: [],
         weekDays: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"],

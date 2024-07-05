@@ -63,13 +63,13 @@ const generateTimeSlots = () => {
 
 type Props = {
     setIShowDialogue: (value: boolean) => void;
-    currentDate: Date;
+    currentDate: string;
 }
 
 function ModalEvent({setIShowDialogue, currentDate}: Props) {
 
-    const [dateSelected, setDateSelected] = useState(new Date(currentDate))
-    console.log("dateSelected:",dateSelected)
+    const [dateDaySelected, setDateDaySelected] = useState(new Date(currentDate))
+    console.log("dateDaySelected:",dateDaySelected)
    /* console.log("Type of dateSelected:",typeof(dateSelected)) */
 
     /* console.log("new Date", new Date("2024-08-01"))
@@ -135,7 +135,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                         <div className="flex flex-col gap-y-4 overflow-y-scroll h-96 p-4 lg:px-6">
                             <div className="grid grid-cols-2 gap-x-4 justify-center">
                                 <div>
-                                    <DatePicker1 currentDate={currentDate} setDateSelected={setDateSelected}/>
+                                    <DatePicker1 currentDate={currentDate} setDateDaySelected={setDateDaySelected} dateDaySelected={dateDaySelected} />
                                 </div>
                                 <div>
                                     <FormField

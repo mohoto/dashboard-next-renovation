@@ -22,7 +22,7 @@ const sortEventsByTime = (events: EventsData) => {
 
 function Day({index, daysGridLength, item, events}: Props) {
 
-    console.log("item:", item.date)
+    //console.log("type of item:", item.date)
 
     const [showDialogue, setIShowDialogue] = useState<boolean>(false)
 
