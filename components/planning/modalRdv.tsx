@@ -2,8 +2,9 @@
 import {useState} from 'react'
 import moment from 'moment';
 import { Moment } from 'moment';
+import {supabaseClient} from '@/utils/supabase/client'
 import Datepicker from "tailwind-datepicker-react"
-import DatePicker1 from '@/components/calendar/datePicker1'
+import DatePicker1 from '@/components/planning/datePicker1'
 import {
     Form,
     FormControl,
@@ -28,25 +29,23 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 const FormSchema = z.object({
-    heureInstalation: z.string().min(2),
+    heure_installation: z.string().min(2),
     nom: z.string().min(2),
     prenom: z.string().min(2),
     tel: z.string().min(2),
     email: z.string().min(2),
     adresse: z.string().min(2),
     ville: z.string().min(2),
-    codePostal: z.string().min(2),
-    statutClient: z.string().min(2),
-    typeHabitation: z.string().min(2),
-    surface: z.string().min(2),
-    typeChauffage: z.string().min(2),
-    nbrRadiateurs: z.string(),
+    code_postal: z.string().min(2),
+    statut_client: z.string().min(2),
+    type_habitation: z.string().min(2),
+    surface_habitable: z.string().min(2),
+    type_chauffage: z.string().min(2),
+    nombre_radiateur: z.string(),
     commentaires: z.string(),
-    //statut: z.string().min(2),
-    /* dateInstallation : z.string().min(2),
-    rappelTelephone: z.string().min(2), */
-
-
+    //statut: z.string(),
+    //commercial: z.string(),
+    //technicien: z.string(),
   })
 
 // Fonction pour générer les heures et demi-heures
@@ -66,7 +65,7 @@ type Props = {
     currentDate: string;
 }
 
-function ModalEvent({setIShowDialogue, currentDate}: Props) {
+function ModalRdv({setIShowDialogue, currentDate}: Props) {
 
     const [dateDaySelected, setDateDaySelected] = useState(new Date(currentDate))
     console.log("dateDaySelected:",dateDaySelected)
@@ -80,31 +79,46 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            heureInstalation: "",
+            heure_installation: "",
             nom: "",
             prenom: "",
             tel: "",
             email: "",
             adresse: "",
             ville: "",
-            codePostal: "",
-            statutClient: "",
-            typeHabitation: "",
-            surface: "",
-            typeChauffage: "",
-            nbrRadiateurs: "",
+            code_postal: "",
+            statut_client: "",
+            type_habitation: "",
+            surface_habitable: "",
+            type_chauffage: "",
+            nombre_radiateur: "",
             commentaires: "",
+            //statut: "Planifié",
+            //commercial: "Linda",
+            //technicien: "Isaac"
             //statut: "",
             //dateInstallation : day.format('YYYY-MM-DD'),
             /*rappelTelephone: "",  */
         },
       })
 
+
       const timeSlots = generateTimeSlots();
 
 
-      const onSubmit = (values: z.infer<typeof FormSchema>) => {
-        console.log(values)
+      const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+        console.log("values:", values)
+        const statut = "Planifié"
+        const technicien = "Issac"
+        const commercial = "Linda"
+        
+        const { data, error } = await supabaseClient
+        .from('planning')
+        .insert({...values, statut: statut, technicien: technicien, commercial: commercial})
+        .select()
+        
+        console.log("data:", data)
+        console.log("error:", error)
       }
 
 
@@ -140,7 +154,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                                 <div>
                                     <FormField
                                     control={form.control}
-                                    name="heureInstalation"
+                                    name="heure_installation"
                                     render={({ field }) => (
                                         <FormItem>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -253,7 +267,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                             <div>
                                 <FormField
                                 control={form.control}
-                                name="codePostal"
+                                name="code_postal"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-muted-foreground">Code postal</FormLabel>
@@ -268,7 +282,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                             <div>
                                 <FormField
                                 control={form.control}
-                                name="statutClient"
+                                name="statut_client"
                                 render={({ field }) => (
                                     <FormItem>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -290,7 +304,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                             <div>
                                 <FormField
                                 control={form.control}
-                                name="typeHabitation"
+                                name="type_habitation"
                                 render={({ field }) => (
                                     <FormItem>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -312,7 +326,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                             <div>
                                 <FormField
                                 control={form.control}
-                                name="typeChauffage"
+                                name="type_chauffage"
                                 render={({ field }) => (
                                     <FormItem>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -336,7 +350,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                             <div>
                                 <FormField
                                 control={form.control}
-                                name="surface"
+                                name="surface_habitable"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-muted-foreground">Surface</FormLabel>
@@ -351,7 +365,7 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
                             <div>
                                 <FormField
                                 control={form.control}
-                                name="nbrRadiateurs"
+                                name="nombre_radiateur"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-muted-foreground">Nombre de radiateurs</FormLabel>
@@ -466,4 +480,4 @@ function ModalEvent({setIShowDialogue, currentDate}: Props) {
   )
 }
 
-export default ModalEvent
+export default ModalRdv

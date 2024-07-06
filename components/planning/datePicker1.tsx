@@ -13,8 +13,11 @@ type Props = {
 
 function DatePicker1({currentDate, setDateDaySelected, dateDaySelected}: Props) {
 
+    //const [selectedDate, setSelectedDate] = (useState < Date) | (null > null)
+
 
     console.log("currentDate:", currentDate)
+    console.log("Type of dateDaySelected", typeof(dateDaySelected))
     /* console.log("new Date", new Date("2024-08-01")) */
 
     const [show, setShow] = useState<boolean>(false)
@@ -24,7 +27,7 @@ function DatePicker1({currentDate, setDateDaySelected, dateDaySelected}: Props) 
 
     const handleChange = (selectedDate: Date) => {
 		console.log("selectedDate", selectedDate)
-        setDateDaySelected(selectedDate)
+        //setSelectedDate(selectedDate)
 	}
 
     const options = {
@@ -62,11 +65,11 @@ function DatePicker1({currentDate, setDateDaySelected, dateDaySelected}: Props) 
         inputNameProp: "date",
         inputIdProp: "date",
         inputPlaceholderProp: "Select Date",
-        inputDateFormatProp: {
+        /* inputDateFormatProp: {
             day: "numeric",
             month: "long",
             year: "numeric"
-        }
+        } */
     }
 
   return (

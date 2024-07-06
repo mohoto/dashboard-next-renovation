@@ -1,6 +1,5 @@
 import React from 'react'
-import {supabase} from '@/utils/supabase'
-import CardPlanning from '@/components/planning/cardPlanning';
+import {supabaseClient} from '@/utils/supabase/client'
 
 type Intervention = {
   id: number;

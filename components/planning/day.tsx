@@ -4,9 +4,9 @@ import {useState} from 'react'
 import { DaysGrid, EventsData } from '@/types/EventCalendarTypes';
 import moment from 'moment';
 import {cn} from '@/lib/utils';
-import EventCardMonth from '@/components/calendar/eventCardMonth';
+import RdvCardMonth from '@/components/planning/rdvCardMonth';
 import { IoAddCircle } from "react-icons/io5";
-import ModalEvent from '@/components/calendar/modalEvent';
+import ModalRdv from '@/components/planning/modalRdv';
 
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
 }
 
 const sortEventsByTime = (events: EventsData) => {
-    return events.sort((a, b) => moment(a.date).valueOf() - moment(b.date).valueOf());
+    return events.sort((a, b) => moment(a.date_installation).valueOf() - moment(b.date_installation).valueOf());
 };
 
 function Day({index, daysGridLength, item, events}: Props) {
@@ -35,7 +35,7 @@ function Day({index, daysGridLength, item, events}: Props) {
 
     const isSameDay = moment().isSame(item.date, 'day');
 
-    const sortedEvents = sortEventsByTime(events);
+    const sortedEvents = events ? sortEventsByTime(events) : [];
 
   return (
     <div>
@@ -55,12 +55,12 @@ function Day({index, daysGridLength, item, events}: Props) {
             {/* Event dispaly */}
             <div>
                 {sortedEvents?.map((event, index) => (
-                    <EventCardMonth key={event.id} event={event} index={index}/>
+                    <RdvCardMonth key={event.id} event={event} index={index}/>
                 ))}
             </div>
         </div>
         {showDialogue && (
-            <ModalEvent setIShowDialogue={setIShowDialogue} currentDate={item.date.format('YYYY MM DD')}/>
+            <ModalRdv setIShowDialogue={setIShowDialogue} currentDate={item.date.format('YYYY MM DD')}/>
         )}
     </div>
   )

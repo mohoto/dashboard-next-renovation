@@ -1,9 +1,9 @@
 "use client"
 import React from 'react'
-import ControlsMonth from '@/components/calendar/controlsMonth'
+import ControlsMonth from '@/components/planning/controlsMonth'
 import useEventCalendarMonth from '@/hooks/useEventCalendarMonth'
-import Day from '@/components/calendar/day'
-import ExtraDays from '@/components/calendar/extraDays'
+import Day from '@/components/planning/day'
+import ExtraDays from '@/components/planning/extraDays'
 import { EventsData } from '@/types/EventCalendarTypes'
 
 type Props = {
@@ -25,7 +25,7 @@ const {date, changeMonth, daysGrid} = useEventCalendarMonth();
             daysGridLength={daysGrid.length} 
             item={item} 
             index={index}
-            events={data.filter(d => item.date.isSame(d.date, 'day') )} />) 
+            events={data.filter(d => item.date.isSame(d.date_installation, 'day') )} />) 
         : (
             <ExtraDays 
             key={index} 

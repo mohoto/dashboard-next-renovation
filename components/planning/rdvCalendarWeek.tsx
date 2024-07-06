@@ -1,14 +1,12 @@
 "use client"
 import {useState} from 'react';
-import Day from '@/components/calendar/day'
-import ExtraDays from '@/components/calendar/extraDays'
 import { EventsData } from '@/types/EventCalendarTypes'
 import moment from 'moment';
 import useEventCalendarWeek from '@/hooks/useEventCalendarWeek';
-import EventCardWeek from '@/components/calendar/eventCardMonth';
+import RdvCardWeek from '@/components/planning/rdvCardMonth';
 import { IoAddCircle } from "react-icons/io5";
-import ModalEvent from '@/components/calendar/modalEvent';
-import ControlsWeek from '@/components/calendar/controlsWeek';
+import ModalRdv from '@/components/planning/modalRdv';
+import ControlsWeek from '@/components/planning/controlsWeek';
 import { cn } from '@/lib/utils';
 
 type Props = {
@@ -16,7 +14,7 @@ type Props = {
   onDataChange: (events: EventsData) => void;
 }
 
-function EventCalendarWeek({data, onDataChange}: Props) {
+function RdvCalendarWeek({data, onDataChange}: Props) {
 
   const {currentWeek, setCurrentWeek, changeWeek, date} = useEventCalendarWeek(); 
   const [showDialogue, setIShowDialogue] = useState<boolean>(false)
@@ -30,11 +28,11 @@ function EventCalendarWeek({data, onDataChange}: Props) {
     const isSameDay = moment().isSame(date, 'day');
 
     // Trier les événements par date
-    const sortedEvents = data.sort((a, b) => moment(a.date).valueOf() - moment(b.date).valueOf());
+    const sortedEvents = data.sort((a, b) => moment(a.date_installation).valueOf() - moment(b.date_installation).valueOf());
 
     return (
         <div>
-            <ControlsWeek changeWeek={changeWeek} currentWeek={currentWeek} setCurrentWeek={setCurrentWeek}/>
+            <ControlsWeek changeWeek={changeWeek} currentWeek={currentWeek} date={date}/>
             <div className="lg:grid-cols-4 xl:grid-cols-7">
                 {daysOfWeek.map(day => (
                     <div key={day.format('DD-MM-YYYY')} className="border p-4">
@@ -47,19 +45,19 @@ function EventCalendarWeek({data, onDataChange}: Props) {
                       </div>
                         <ul>
                             {sortedEvents
-                                .filter(event => moment(event.date).isSame(day, 'day'))
+                                .filter(event => moment(event.date_installation).isSame(day, 'day'))
                                 .map((event, index) => (
-                                  <EventCardWeek key={event.id} event={event} index={index}/>
+                                  <RdvCardWeek key={event.id} event={event} index={index}/>
                                 ))}
                         </ul>
                     </div>
                 ))}
             </div>
             {showDialogue && (
-            <ModalEvent setIShowDialogue={setIShowDialogue} />
-        )}
+            <ModalRdv setIShowDialogue={setIShowDialogue} currentDate={date.format('YYYY MM DD')}/>
+            )}
         </div>
     );
 }
 
-export default EventCalendarWeek
+export default RdvCalendarWeek
